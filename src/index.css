@@ -1,0 +1,33 @@
+input {
+  width: 300px;
+  height: 30px;
+  border:1px solid #000;
+  outline: none;
+  box-shadow: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+}
+
+button{
+  margin-top: 20px;
+  width: 150px;
+  height: 40px;
+  box-shadow: none;
+  border-radius: 10px;
+  padding: 10px 15px;
+  font-weight: 500;
+  font-size: 16px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.hash{
+  width: 400px;
+  height: 100px;
+  border: 1px solid #000;
+  margin: auto;
+  padding: 10px;
+}
+h4{
+  text-align: left;
+}
