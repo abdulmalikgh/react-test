@@ -15,7 +15,6 @@ const Home = () => {
 
   const search = useSearch({ strict: false});  
   const navigate = useNavigate();
-  console.log(search)
 
   useEffect(() => {
     if (search.data?.input) {
