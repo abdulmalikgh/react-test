@@ -6,7 +6,7 @@ export const Route = createFileRoute('/')({
 });
 
 const Home = () => {
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState<string>('');
   const [hash, setHash] = useState<{
     md5: string;
     original: string;
