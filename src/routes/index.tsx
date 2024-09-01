@@ -3,41 +3,53 @@ import { createFileRoute, useNavigate, useSearch } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/')({
   component: () => <Home />
-})
+});
 
 const Home = () => {
   const [input, setInput] = useState('');
-  const [hash, setHash] = useState<string | null>(null);
+  const [hash, setHash] = useState<{
+    md5: string;
+    original: string;
+  } | null>(null);
   const [loading, setLoading] = useState(false);
-  const search = useSearch({}); 
+
+  const search = useSearch({ strict: false});  
   const navigate = useNavigate();
+  console.log(search)
 
   useEffect(() => {
-    if (search.input) {
-      setInput(search.input);
-      setLoading(true);  // Set loading when fetching from URL param
-      handleFetchHash(search.input);
+    if (search.data?.input) {
+      setInput(search.data.input);
+      handleFetchHash(search.data.input);
     }
   }, [search]);
 
   const handleFetchHash = (text: string) => {
+    setLoading(true);
     fetch(`http://md5.jsontest.com/?text=${text}`)
       .then((response) => response.json())
-      .then((data) => setHash(data.md5))
-      .catch((error) => console.error('Error fetching MD5 hash:', error))
+      .then((data) => setHash(data))
+      .catch((error) => {
+        alert(error);
+      })
       .finally(() => setLoading(false));
   };
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    if (input.trim() === "") return;  // Avoid empty inputs
+    if (input.trim() === "") {
+      alert('Input field is empty');
+      return;
+    }
 
     setLoading(true);
-    setHash(null); // Reset hash on new submit
+    setHash(null);
+
     navigate({
-      search: { input },
+      search: { data: { input } },
     });
+
     handleFetchHash(input);
   };
 
@@ -55,14 +67,18 @@ const Home = () => {
         {loading ? 'Loading..' : 'Convert'}
       </button>
 
-      {
-        hash && !loading && (
-          <div className='hash'>
-            <h4><span style={{ color: '#000080'}}>Original Text :</span> <span style={{ color: "#DD1144"}}>{input}</span></h4>
-            <h4 ><span style={{ color: '#000080'}}>MD5 :</span> <span style={{ color: "#DD1144"}}>{hash}</span></h4>
-          </div>
-        )
-      }
+      {hash && !loading && (
+        <div className='hash'>
+          <h4>
+            <span style={{ color: '#000080' }}>Original Text : </span> 
+            <span style={{ color: "#DD1144" }}>{hash.original}</span>
+          </h4>
+          <h4>
+            <span style={{ color: '#000080' }}>MD5 : </span> 
+            <span style={{ color: "#DD1144" }}>{hash.md5}</span>
+          </h4>
+        </div>
+      )}
     </div>
   );
 };
