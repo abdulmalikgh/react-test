@@ -25,6 +25,7 @@ const Home = () => {
 
   const handleFetchHash = (text: string) => {
     setLoading(true);
+    
     fetch(`http://md5.jsontest.com/?text=${text}`)
       .then((response) => response.json())
       .then((data) => setHash(data))
